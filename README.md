@@ -2,26 +2,6 @@
 
 The **Event Registration and Management** system is a comprehensive, full-stack Java web application designed to streamline the planning, registration, and administration of events. It provides a seamless experience for organizers to manage ticketing, capacities, and payments, while giving attendees an intuitive platform to discover events, register as individuals or teams, and access digital tickets.
 
-## Screenshots
-*(Add your screenshots to a `screenshots` folder in the repository and update the links below)*
-<!-- 
-![Dashboard Screenshot](screenshots/dashboard.png)
-![Event Registration Screenshot](screenshots/registration.png)
--->
-
-## Demo Login Credentials
-
-**Organizers (Can create/manage events & verify payments):**
-- **Email:** `srinivas.murthy@gmail.com` | **Password:** `Organizer@123`
-- **Email:** `kavitha.bhat@gmail.com` | **Password:** `Organizer@123`
-
-**Regular Users / Attendees:**
-- **Email:** `rahul.sharma@gmail.com` | **Password:** `Password@123`
-- **Email:** `priya.nair@gmail.com` | **Password:** `Password@123`
-- **Email:** `amit.kumar@gmail.com` | **Password:** `Password@123`
-- **Email:** `sneha.reddy@gmail.com` | **Password:** `Password@123`
-*(Note: There are 8 user accounts in total, all using the password `Password@123`)*
-
 ## Technology Stack
 
 | Component | Technology |
