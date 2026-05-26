@@ -1,0 +1,120 @@
+-- ============================================
+-- Event Registration & Management System
+-- Clean Database Schema
+-- ============================================
+
+-- Create Database
+CREATE DATABASE IF NOT EXISTS event_system;
+USE event_system;
+
+-- ============================================
+-- 1. USERS TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    user_type ENUM('COLLEGE', 'COMPANY', 'PUBLIC') DEFAULT 'PUBLIC',
+    role ENUM('ADMIN', 'USER') DEFAULT 'USER',
+    org_count INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 2. ORGANIZATIONS TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS organizations (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL UNIQUE,
+    type VARCHAR(50),
+    admin_user_id INT UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_user_id) REFERENCES users(id)
+);
+
+-- ============================================
+-- 3. EVENTS TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    event_date DATE,
+    location VARCHAR(200),
+    organization_id INT,
+    created_by INT,
+    status ENUM('ACTIVE', 'HIDDEN') DEFAULT 'ACTIVE',
+    eligibility ENUM('OPEN', 'COLLEGE_ONLY', 'COMPANY_ONLY') DEFAULT 'OPEN',
+    capacity INT DEFAULT 100,
+    available_seats INT DEFAULT 100,
+    price DECIMAL(10,2) DEFAULT 0.00,
+    event_type ENUM('FREE', 'PAID') DEFAULT 'FREE',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (organization_id) REFERENCES organizations(id),
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    CONSTRAINT unique_event UNIQUE (title, event_date)
+);
+
+-- ============================================
+-- 4. REGISTRATIONS TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS registrations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    event_id INT,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    CONSTRAINT unique_user_event UNIQUE (user_id, event_id)
+);
+
+-- ============================================
+-- 5. REPORTS TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT,
+    user_id INT,
+    reason VARCHAR(255),
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT unique_user_report UNIQUE (user_id, event_id)
+);
+
+-- ============================================
+-- 6. WAITLIST TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS waitlist (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    event_id INT,
+    waitlisted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    CONSTRAINT unique_user_waitlist UNIQUE (user_id, event_id)
+);
+
+-- ============================================
+-- 7. PAYMENTS TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    event_id INT,
+    amount DECIMAL(10,2) NOT NULL,
+    status ENUM('SUCCESS', 'FAILED') DEFAULT 'SUCCESS',
+    paid_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
+);
+
+-- ============================================
+-- 8. APPLICATION DATABASE USER
+-- ============================================
+CREATE USER IF NOT EXISTS 'event_user'@'localhost'
+IDENTIFIED BY 'Event@123';
+
+GRANT ALL PRIVILEGES ON event_system.* TO 'event_user'@'localhost';
+
+FLUSH PRIVILEGES;
