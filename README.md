@@ -1,63 +1,116 @@
 # Event Registration and Management
 
-The **Event Registration and Management** system is a comprehensive, full-stack Java web application designed to streamline the planning, registration, and administration of events. It provides a seamless experience for organizers to manage ticketing, capacities, and payments, while giving attendees an intuitive platform to discover events, register as individuals or teams, and access digital tickets. 
+The **Event Registration and Management** system is a comprehensive, full-stack Java web application designed to streamline the planning, registration, and administration of events. It provides a seamless experience for organizers to manage ticketing, capacities, and payments, while giving attendees an intuitive platform to discover events, register as individuals or teams, and access digital tickets.
 
-## 📂 Project Structure (Eclipse)
+## Screenshots
+*(Add your screenshots to a `screenshots` folder in the repository and update the links below)*
+<!-- 
+![Dashboard Screenshot](screenshots/dashboard.png)
+![Event Registration Screenshot](screenshots/registration.png)
+-->
+
+## Demo Login Credentials
+
+**Organizers (Can create/manage events & verify payments):**
+- **Email:** `srinivas.murthy@gmail.com` | **Password:** `Organizer@123`
+- **Email:** `kavitha.bhat@gmail.com` | **Password:** `Organizer@123`
+
+**Regular Users / Attendees:**
+- **Email:** `rahul.sharma@gmail.com` | **Password:** `Password@123`
+- **Email:** `priya.nair@gmail.com` | **Password:** `Password@123`
+- **Email:** `amit.kumar@gmail.com` | **Password:** `Password@123`
+- **Email:** `sneha.reddy@gmail.com` | **Password:** `Password@123`
+*(Note: There are 8 user accounts in total, all using the password `Password@123`)*
+
+## Technology Stack
+
+| Component | Technology |
+| :--- | :--- |
+| **Language** | Java 17 |
+| **Web Framework** | Jakarta Servlet 6.0 + JSP 3.1 |
+| **Tag Library** | JSTL 3.0 |
+| **Web Server** | Apache Tomcat 11 |
+| **Database** | MySQL 8.0 |
+| **JDBC Driver** | mysql-connector-j 8.0.33 |
+| **Build Tool** | Apache Maven |
+| **IDE** | Eclipse IDE for Enterprise Java |
+
+## Project Structure (Eclipse)
+
 ```text
 EventRegistrationAndManagement/
-├── src/main/java/          # Java source code (Controllers, Models, DAOs, Services)
-│   └── com/event/          # Main application package
-├── src/main/webapp/        # Frontend resources (JSP, CSS, HTML)
-│   ├── WEB-INF/            # Web application configuration (web.xml)
-│   └── jsp/                # View templates for the application
-├── pom.xml                 # Maven configuration and dependencies
-├── .classpath              # Eclipse classpath configuration
-├── .project                # Eclipse project configuration
-├── .settings/              # Eclipse workspace settings for the project
-├── event_system.sql.txt    # Base database schema
-└── advance_migrations.sql  # Database schema updates
+├── .classpath              # Eclipse classpath config
+├── .project                # Eclipse project descriptor
+├── .settings/              # Eclipse workspace settings
+├── pom.xml                 # Maven build file
+└── src/
+    └── main/
+        ├── java/com/event/
+        │   ├── controller/ # 30 Servlets (LoginServlet, AddEventServlet, etc.)
+        │   ├── service/    # Business logic (EventService, UserService)
+        │   ├── dao/        # Data Access (EventDAO, UserDAO, TeamDAO, TicketDAO)
+        │   ├── model/      # POJOs (User, Event, Team, Ticket, Notification)
+        │   └── util/       # DBConnection, PasswordUtil
+        └── webapp/
+            ├── index.jsp   # Landing page
+            ├── css/        # Stylesheets
+            ├── jsp/        # 21 JSP pages
+            ├── uploads/    # Payment screenshots (runtime)
+            └── WEB-INF/
+                ├── web.xml # Deployment descriptor
+                └── lib/    # Libraries
 ```
 
-## ✨ Features
+## Features
 
-### 🧑‍💼 Organizer
-- **Dashboard:** Get an overview of all created events and attendee statistics.
-- **Event Management:** Create, publish, edit, and delete events easily.
-- **Ticketing & Payments:** Manage digital tickets and verify offline payments from attendees.
-- **Waitlist Management:** Handle overflow registrations automatically when events reach maximum capacity.
-- **Check-In System:** Mark attendees as checked in on the day of the event.
-- **Reporting:** Export registrations and attendee lists for logistics planning.
+### Attendee
+- Browse and filter events (by title, date, location, eligibility)
+- Register for individual or team events with custom forms
+- Upload payment screenshots for paid events
+- Receive digital tickets (TKT-XXXXXXXX)
+- Join waitlist when event is full (auto-promoted on cancellations)
+- Manage team members, cancel registration
+- In-app notifications
 
-### 👤 Attendee
-- **User Dashboard:** Browse upcoming events and see your registration history.
-- **Event Registration:** Register for events as an individual or join/create a team.
-- **My Tickets:** View and manage digital tickets for verified registrations.
-- **Payment Status:** Check whether your offline payment has been verified by the organizer.
+### Organizer
+- Create organization and host events
+- Configure capacity, pricing, eligibility, custom form fields
+- Verify payment screenshots (approve/reject)
+- Check-in attendees on event day using ticket IDs
+- Broadcast announcements to all registrants
+- Export registration data as CSV
+- View attendees, waitlist, and cancellations
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
-### 1. Database Setup
-1. Ensure MySQL Server is installed and running on your local machine.
-2. Open your preferred MySQL client (e.g., MySQL Workbench).
-3. Execute the `event_system.sql.txt` script to create the database and base tables.
-4. Next, execute the `advance_migrations.sql` script to apply the latest database updates.
-5. Update your database credentials (URL, username, and password) in `src/main/java/com/event/util/DBConnection.java` and `src/main/java/com/event/util/DbApply.java`.
+### Prerequisites
+- Java 17 (JDK)
+- Apache Tomcat 11
+- MySQL 8.0
+- Eclipse IDE for Enterprise Java Developers
+- Maven
 
-### 2. Eclipse IDE Setup
-1. Clone the repository to your local machine.
-2. Open Eclipse and navigate to **File > Import**.
-3. Select **Maven > Existing Maven Projects** and browse to the cloned repository directory.
-4. Click **Finish** to import the project. Let Eclipse download the necessary Maven dependencies.
-5. Right-click the imported project in the Project Explorer, select **Run As > Run on Server**.
-6. Select your configured server (e.g., Apache Tomcat) and click **Finish**.
-7. The application will launch in your browser (usually at `http://localhost:8080/EventRegistrationAndManagement`).
+### Database Setup
 
-## 🏗️ Architecture
+```sql
+CREATE DATABASE event_system;
+CREATE USER 'event_user'@'localhost' IDENTIFIED BY 'Event@123';
+GRANT ALL PRIVILEGES ON event_system.* TO 'event_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+*(Also, remember to import your SQL scripts `event_system.sql.txt` and `advance_migrations.sql` into the `event_system` database).*
 
-This project is built using a classic **Model-View-Controller (MVC)** architecture utilizing Java web technologies:
+### Import in Eclipse
+1. Open Eclipse → File → Import → Maven → Existing Maven Projects
+2. Browse to this project folder and click Finish
+3. Right-click project → Maven → Update Project
+4. Right-click project → Run As → Run on Server → Select Tomcat 11
+5. Open browser → `http://localhost:8080/EventRegistrationAndManagement/`
 
-- **View (JSP):** The presentation layer. It handles displaying data to the user and collecting input via HTML forms (`src/main/webapp/jsp`).
-- **Controller (Servlets):** The business logic coordinator. It receives HTTP requests from the View, processes the logic, interacts with the Service and DAO layers, and forwards the appropriate response back to the View (`com.event.controller`).
-- **Model (Java Beans & DAO):** The data layer. It includes Data Objects representing entities like Events, Users, and Tickets (`com.event.model`), and Data Access Objects (DAO) that manage raw interactions with the MySQL Database using JDBC (`com.event.dao`).
+## Architecture
 
-The application is built and managed using **Maven** and is designed to run in any standard Java Servlet Container (such as **Apache Tomcat**).
+The project follows **MVC** with DAO and Service layers:
+
+```text
+Browser (JSP) → Servlets (Controller) → Service → DAO → MySQL
+```
