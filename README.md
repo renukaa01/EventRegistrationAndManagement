@@ -1,5 +1,7 @@
 # Event Registration and Management
 
+The **Event Registration and Management** system is a comprehensive, full-stack Java web application designed to streamline the planning, registration, and administration of events. It provides a seamless experience for organizers to manage ticketing, capacities, and payments, while giving attendees an intuitive platform to discover events, register as individuals or teams, and access digital tickets. 
+
 ## 📂 Project Structure (Eclipse)
 ```text
 EventRegistrationAndManagement/
